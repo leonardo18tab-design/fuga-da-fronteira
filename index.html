@@ -45,7 +45,7 @@ h1{font-size:clamp(26px,5vw,44px);line-height:.97;letter-spacing:-.045em;margin:
 <button class="skin" data-skin="gotinha"><div class="avatar">💧</div><strong>Zé Gotinha</strong><small>Recupera energia</small></button>
 <button class="skin" data-skin="cowboy"><div class="avatar">🤠</div><strong>Cowboy</strong><small>Laço de confete</small></button>
 </div><div class="actions"><button class="primary" id="playBtn">ENTRAR NA CIDADE</button><button class="secondary" id="backBtn">VOLTAR</button></div><p class="tip">Controle: analógico 360° à esquerda · botão PODER à direita · botão azul para impulso rápido.</p></div></section>
-<section class="screen" id="howScreen" style="display:none"><div class="panel manual"><div class="eyebrow">Manual da missão</div><h1>CONTROLE TOTAL DA ESTRADA</h1><p class="sub">• Arraste o analógico em qualquer direção para andar livremente pela estrada.<br>• Empurre para a direita para avançar; para a esquerda para recuar; para cima ou para baixo para trocar de faixa.<br>• Pessoas da PF e manifestantes têm campo de visão: quando te enxergam, correm atrás de você, mas são um pouco mais lentos.<br>• Viaturas da PF são muito rápidas, porém seguem em linha reta e não mudam de faixa.<br>• Use PODER para ativar a habilidade do disfarce. Colete dinheiro e kits de energia.<br>• Procure a placa verde <b>PASSAGEM PARA ARGENTINA</b> e alcance o jato no fim da rota.</p><div class="actions"><button class="primary" id="howBackBtn">ENTENDI</button></div></div></section>
+<section class="screen" id="howScreen" style="display:none"><div class="panel manual"><div class="eyebrow">Manual da missão</div><h1>CONTROLE TOTAL DA ESTRADA</h1><p class="sub">• Arraste o analógico em qualquer direção para andar livremente pela estrada.<br>• Empurre para a direita para avançar; para a esquerda para recuar; para cima ou para baixo para trocar de faixa.<br>• Pessoas da PF e petistas caricatos têm campo de visão: quando te enxergam, correm atrás de você, mas são um pouco mais lentos.<br>• Viaturas da PF são muito rápidas, porém seguem em linha reta e não mudam de faixa.<br>• Use PODER para ativar a habilidade do disfarce. Colete dinheiro e kits de energia.<br>• Procure a placa verde <b>PASSAGEM PARA ARGENTINA</b> e alcance o jato no fim da rota.</p><div class="actions"><button class="primary" id="howBackBtn">ENTENDI</button></div></div></section>
 <section class="screen" id="endScreen" style="display:none"><div class="panel"><div class="eyebrow" id="endEyebrow">Missão concluída</div><h1 id="endTitle">JATO LIBERADO!</h1><p class="sub" id="endText"></p><div class="actions"><button class="primary" id="againBtn">ESCOLHER OUTRO DISFARCE</button><button class="secondary" id="menuBtn">MENU PRINCIPAL</button></div></div></section>
 <section class="screen" id="pausePanel" style="display:none"><div class="panel"><div class="eyebrow">Pausa na fuga</div><h1>RESPIRA!</h1><p class="sub">Até a perseguição precisa de um intervalo.</p><div class="actions"><button class="primary" id="resumeBtn">CONTINUAR</button><button class="secondary" id="quitBtn">SAIR PARA O MENU</button></div></div></section>
 <div id="hud"><div class="hudtop"><div class="hudcard"><div class="hudlabel">ENERGIA</div><div class="hudvalue" id="hpText">100%</div><div class="bar"><div class="fill" id="hpFill"></div></div></div><div class="hudcard" style="text-align:center"><div class="hudlabel">ATÉ A ARGENTINA</div><div class="hudvalue" id="distanceText">18,5 KM</div><div class="bar" style="width:170px"><div class="fill progress" id="progressFill"></div></div></div><div class="hudcard"><div class="hudlabel">PONTOS</div><div class="hudvalue" id="scoreText">0</div><div class="hudlabel" id="skinText">PRESIDENTE</div></div><button id="pause">Ⅱ</button></div><div id="alert">⚠ VOCÊ FOI AVISTADO!</div></div>
@@ -80,7 +80,7 @@ function resetGame(){
  player={x:110,y:414,vx:0,vy:0,hp:100,dir:1,walk:0,invuln:0,blink:0,muzzle:0,shield:0};
  camera.x=0;score=0;worldTime=0;worldDistance=0;cutsceneTime=0;screenShake=0;powerTimer=0;powerCooldown=0;boostTimer=0;hitCooldown=0;autoShot=0;
  enemies=[];cars=[];obstacles=[];pickups=[];projectiles=[];particles=[];decoys=[];
- for(let i=0;i<30;i++){const x=650+i*570;enemies.push({x,y:350+(i*47%125),kind:i%4===0?'pf':'pt',facing:-1,speed:205+(i%3)*8,phase:i*.71,alert:false,stun:0,alive:true,damageWait:0});}
+ for(let i=0;i<30;i++){const x=650+i*570;enemies.push({x,y:350+(i*47%125),kind:i%4===0?'pf':'pt',facing:-1,speed:250+(i%3)*6,phase:i*.71,alert:false,stun:0,alive:true,damageWait:0});}
  for(let i=0;i<21;i++){const x=980+i*820;cars.push({x,y:[350,390,432,474][i%4],dir:i%3===0?1:-1,speed:470+(i%4)*48,phase:i*.9,hitWait:0});}
  for(let i=0;i<23;i++){obstacles.push({x:480+i*735,y:330+(i*31%145),w:36+(i%3)*12,h:28+(i%2)*12,type:i%3===0?'cone':i%3===1?'barrier':'crate',alive:true});}
  for(let i=0;i<38;i++){pickups.push({x:340+i*450,y:340+(i*43%145),type:i%7===0?'med':'cash',taken:false,phase:i*.7});}
@@ -103,7 +103,7 @@ function activatePower(){if(state!=='PLAYING'||paused||powerCooldown>0)return;co
 }
 function fireFoam(){if(powerCooldown>.19&&autoShot>0)return;const dir=player.dir||1;for(let i=-3;i<=3;i++)projectiles.push({x:player.x+dir*38,y:player.y-28+i*2,vx:dir*760,vy:i*95,life:.8,type:'foam'});player.muzzle=.12;screenShake=2;burst(player.x+dir*42,player.y-30,'#ffe08a',5);}
 function update(dt){if(state!=='PLAYING'||paused)return;worldTime+=dt;screenShake=Math.max(0,screenShake-dt*13);powerCooldown=Math.max(0,powerCooldown-dt);boostTimer=Math.max(0,boostTimer-dt);powerTimer=Math.max(0,powerTimer-dt);player.invuln=Math.max(0,player.invuln-dt);player.shield=Math.max(0,player.shield-dt);player.muzzle=Math.max(0,player.muzzle-dt);hitCooldown=Math.max(0,hitCooldown-dt);
- const maxSpeed=(selected==='motoboy'&&boostTimer>0?430:selected==='hipotetico'&&player.shield>0?360:325);
+ let maxSpeed=(selected==='motoboy'&&boostTimer>0?430:selected==='hipotetico'&&player.shield>0?360:325);
  let ix=input.x,iy=input.y;if(Math.abs(ix)<.08)ix=0;if(Math.abs(iy)<.08)iy=0;
  if(boostTimer>0)maxSpeed*=1.18;
  player.vx=ix*maxSpeed;player.vy=iy*220;
@@ -202,8 +202,8 @@ function drawBorder(){const x=BORDER_X-camera.x;if(x<-800||x>W+950)return;
  ctx.fillStyle='#1d5f47';ctx.fillRect(x+105,206,470,12);ctx.fillStyle='#65e59a';for(let i=0;i<7;i++){const blink=(Math.sin(worldTime*5+i)>.1);ctx.fillStyle=blink?'#85ffb1':'#236d54';ctx.beginPath();ctx.arc(x+140+i*67,212,5,0,7);ctx.fill();}
  ctx.fillStyle='#2dc875';ctx.beginPath();ctx.moveTo(x+270,321);ctx.lineTo(x+310,265);ctx.lineTo(x+350,321);ctx.closePath();ctx.fill();ctx.fillStyle='#082a1b';ctx.font='bold 15px sans-serif';ctx.fillText('ARGENTINA',x+255,345);
  // runway
- ctx.fillStyle='#9aa9b5';ctx.fillRect(x+640,315,680,12);for(let i=0;i<9;i++){ctx.fillStyle=Math.sin(worldTime*5+i)>.1?'#ffec9a':'#8c9aa5';ctx.fillRect(x+660+i*72,308,30,4);}
- drawJet(x+785,260);
+ ctx.fillStyle='#9aa9b5';ctx.fillRect(x+390,315,680,12);for(let i=0;i<9;i++){ctx.fillStyle=Math.sin(worldTime*5+i)>.1?'#ffec9a':'#8c9aa5';ctx.fillRect(x+410+i*72,308,30,4);}
+ drawJet(x+600,260);
 }
 function drawJet(px,py){ctx.save();ctx.translate(px,py+Math.sin(worldTime*2.2)*3); // runway shadow
  ctx.fillStyle='#0005';ctx.beginPath();ctx.ellipse(105,46,150,12,0,0,7);ctx.fill();
