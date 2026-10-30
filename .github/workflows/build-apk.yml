@@ -1,36 +1,10 @@
-name: Build Android APK
+name: Build native Godot Android APK
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
 permissions:
   contents: read
 jobs:
-  build:
+  placeholder:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-      - uses: android-actions/setup-android@v3
-        with:
-          packages: platform-tools
-      - name: Install Android SDK
-        run: yes | sdkmanager --licenses >/dev/null && sdkmanager --install "platforms;android-35" "build-tools;35.0.0"
-      - uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.9'
-      - name: Check JavaScript syntax
-        run: node -e "const fs=require('fs'); const vm=require('vm'); const h=fs.readFileSync('index.html','utf8'); const s=h.slice(h.indexOf('<script>')+8,h.lastIndexOf('</script>')); new vm.Script(s); console.log('JavaScript syntax OK')"
-      - name: Package game assets
-        run: mkdir -p android/app/src/main/assets && cp index.html android/app/src/main/assets/index.html && cp logo.svg android/app/src/main/assets/logo.svg
-      - name: Build APK
-        run: gradle -p android --no-daemon assembleDebug
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Fuga-da-Fronteira-APK-v3
-          path: android/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
-          retention-days: 14
+      - run: echo "Migrating game engine"
