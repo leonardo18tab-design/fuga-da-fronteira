@@ -78,7 +78,7 @@ let powerTimer=0,powerCooldown=0,boostTimer=0,hitCooldown=0,worldDistance=0,auto
 function showScreen(id){for(const s of screens)$(s).style.display=s===id?'flex':'none';}
 function resetGame(){
  player={x:110,y:414,vx:0,vy:0,hp:100,dir:1,walk:0,invuln:0,blink:0,muzzle:0,shield:0};
- camera.x=0;score=0;worldTime=0;worldDistance=0;screenShake=0;powerTimer=0;powerCooldown=0;boostTimer=0;hitCooldown=0;autoShot=0;
+ camera.x=0;score=0;worldTime=0;worldDistance=0;cutsceneTime=0;screenShake=0;powerTimer=0;powerCooldown=0;boostTimer=0;hitCooldown=0;autoShot=0;
  enemies=[];cars=[];obstacles=[];pickups=[];projectiles=[];particles=[];decoys=[];
  for(let i=0;i<30;i++){const x=650+i*570;enemies.push({x,y:350+(i*47%125),kind:i%4===0?'pf':'pt',facing:-1,speed:205+(i%3)*8,phase:i*.71,alert:false,stun:0,alive:true,damageWait:0});}
  for(let i=0;i<21;i++){const x=980+i*820;cars.push({x,y:[350,390,432,474][i%4],dir:i%3===0?1:-1,speed:470+(i%4)*48,phase:i*.9,hitWait:0});}
@@ -234,7 +234,7 @@ function drawMenuBackground(){drawCity(); // animated traffic far behind menu
 function finish(won){state=won?'WIN':'LOSE';$('hud').style.display='none';$('touchControls').style.display='none';$('endEyebrow').textContent=won?'Passagem liberada':'Fim da tentativa';$('endTitle').textContent=won?'JATO LIBERADO!':'A PERSEGUIÇÃO TE ALCANÇOU';$('endText').textContent=won?`Você atravessou a passagem para a Argentina com ${score} pontos. Trump está na cabine do jato — próximo destino: Estados Unidos!`:'Sua energia acabou antes da fronteira. Escolha outro disfarce, use o analógico para trocar de faixa e tente despistar os perseguidores.';showScreen('endScreen');}
 function drawBorderScene(){drawWorld();if(cutsceneTime>3.2)finish(true);}
 function render(){if(state==='PLAYING')drawWorld();else if(state==='BORDER')drawBorderScene();else if(state==='MENU'||state==='SELECT'||state==='WIN'||state==='LOSE')drawMenuBackground();}
-function loop(t){const dt=Math.min(.033,(t-last)/1000||0);last=t;if(state==='PLAYING'&&!paused)update(dt);else if(state==='BORDER'&&!paused)cutsceneTime+=dt;render();requestAnimationFrame(loop);}
+function loop(t){const dt=Math.min(.033,(t-last)/1000||0);last=t;if(state==='PLAYING'&&!paused)update(dt);else if(state==='BORDER'&&!paused){cutsceneTime+=dt;worldTime+=dt;}else if(!paused)worldTime+=dt;render();requestAnimationFrame(loop);}
 // Screen controls and selection
 $('startBtn').onclick=()=>showScreen('selectScreen');$('howBtn').onclick=()=>showScreen('howScreen');$('howBackBtn').onclick=()=>showScreen('mainScreen');$('backBtn').onclick=()=>showScreen('mainScreen');$('playBtn').onclick=resetGame;$('againBtn').onclick=()=>showScreen('selectScreen');$('menuBtn').onclick=()=>{state='MENU';$('hud').style.display='none';$('touchControls').style.display='none';showScreen('mainScreen');};$('pause').onclick=()=>{if(state==='PLAYING'){paused=true;showScreen('pausePanel');}};$('resumeBtn').onclick=()=>{paused=false;showScreen(null);};$('quitBtn').onclick=()=>{paused=false;state='MENU';$('hud').style.display='none';$('touchControls').style.display='none';showScreen('mainScreen');};
 document.querySelectorAll('.skin').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.skin').forEach(z=>z.classList.remove('selected'));b.classList.add('selected');selected=b.dataset.skin;}));
