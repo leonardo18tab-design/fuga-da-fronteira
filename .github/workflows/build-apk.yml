@@ -23,12 +23,12 @@ jobs:
         with:
           gradle-version: '8.9'
       - name: Package game assets
-        run: mkdir -p android/app/src/main/assets && cp index.html android/app/src/main/assets/index.html
+        run: mkdir -p android/app/src/main/assets && cp index.html android/app/src/main/assets/index.html && cp logo.svg android/app/src/main/assets/logo.svg
       - name: Build APK
         run: gradle -p android --no-daemon assembleDebug
       - uses: actions/upload-artifact@v4
         with:
-          name: Fuga-da-Fronteira-APK
+          name: Fuga-da-Fronteira-APK-v2
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
