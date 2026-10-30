@@ -22,6 +22,17 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
+      - name: Check JavaScript syntax
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const html = fs.readFileSync('index.html', 'utf8');
+          const scripts = [...html.matchAll(/<script[^>]*>([\\s\\S]*?)<\\/script>/gi)];
+          if (!scripts.length) throw new Error('No inline JavaScript found');
+          scripts.forEach((m, i) => new vm.Script(m[1], { filename: 'inline-' + i + '.js' }));
+          console.log('JavaScript syntax OK');
+          NODE
       - name: Package game assets
         run: mkdir -p android/app/src/main/assets && cp index.html android/app/src/main/assets/index.html && cp logo.svg android/app/src/main/assets/logo.svg
       - name: Build APK
