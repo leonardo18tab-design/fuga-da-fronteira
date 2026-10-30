@@ -1,10 +1,71 @@
 name: Build native Godot Android APK
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'game/**'
+      - '.github/workflows/build-apk.yml'
+      - 'README.md'
 permissions:
   contents: read
+  actions: write
 jobs:
-  placeholder:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Migrating game engine"
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Configure Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Android SDK and native tools
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools build-tools;35.0.1 platforms;android-35 cmdline-tools;latest cmake;3.10.2.4988404 ndk;28.1.13356709'
+      - name: Install Godot 4.7.2 and Android templates
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: '4.7.2'
+          use-dotnet: false
+          include-templates: true
+      - name: Configure Android paths and debug signing
+        run: |
+          mkdir -p "$HOME/.android" "$HOME/.config/godot"
+          keytool -genkeypair -noprompt \
+            -keystore "$HOME/.android/debug.keystore" \
+            -storepass android -alias androiddebugkey -keypass android \
+            -dname "CN=Android Debug,O=Android,C=US" \
+            -keyalg RSA -keysize 2048 -validity 10000
+          cat > "$HOME/.config/godot/editor_settings-4.tres" <<EOF_SETTINGS
+          [gd_resource type="EditorSettings" format=3]
+          [resource]
+          export/android/java_sdk_path = "$JAVA_HOME"
+          export/android/android_sdk_path = "$ANDROID_HOME"
+          EOF_SETTINGS
+      - name: Import resources and validate scene
+        run: |
+          godot --version
+          godot --headless --editor --path game --import --quit
+          godot --headless --path game --quit-after 3
+      - name: Export and verify APK
+        env:
+          GODOT_ANDROID_KEYSTORE_DEBUG_PATH: ${{ runner.temp }}/debug.keystore
+          GODOT_ANDROID_KEYSTORE_DEBUG_USER: androiddebugkey
+          GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD: android
+        run: |
+          mkdir -p game/build
+          cp "$HOME/.android/debug.keystore" "$GODOT_ANDROID_KEYSTORE_DEBUG_PATH"
+          godot --headless --path game --export-debug "Android" game/build/Fuga-da-Fronteira-v4.apk
+          test -s game/build/Fuga-da-Fronteira-v4.apk
+          unzip -t game/build/Fuga-da-Fronteira-v4.apk
+          file game/build/Fuga-da-Fronteira-v4.apk
+      - name: Upload installable APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Fuga-da-Fronteira-APK-v4
+          path: game/build/Fuga-da-Fronteira-v4.apk
+          if-no-files-found: error
+          retention-days: 14
