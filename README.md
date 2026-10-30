@@ -1,20 +1,20 @@
-# Fuga da Fronteira — versão 2.0
+# Fuga da Fronteira — versão 3.0
 
-Jogo arcade satírico em HTML5, CSS e JavaScript. A versão 2 adiciona movimento livre com analógico 360°, uma avenida urbana animada e perseguição com pedestres e viaturas.
+Jogo arcade satírico HTML5/JavaScript empacotado em aplicativo Android.
 
-## Novidades
-- Cidade com prédios em camadas, fachadas, árvores, postes, placas e trânsito animado.
-- Analógico 360°: avanço/recuo e movimentação entre as faixas da estrada.
-- Dez disfarces: Presidente, Flávio Hipotético, Turista, Chocolate, Motoboy, Padre, Militar, Jornalista, Zé Gotinha e Cowboy.
-- Pessoas da PF e manifestantes com campo de visão; ao avistar o jogador, perseguem a pé em velocidade menor.
-- Viaturas da PF rápidas, com giroflex animado, deslocando-se em linha reta sem mudar de faixa.
-- Obstáculos, dinheiro e kits de energia.
-- Portal sinalizado de PASSAGEM PARA ARGENTINA.
-- Jato animado com Trump na cabine no final da rota.
-- Logo própria incluída no menu.
+## Novidades da versão 3
+- Pedestres e viaturas surgem à frente, pela direita da tela, sem nascer sobre o jogador.
+- Renderização dos perseguidores usa a área visível inteira, com entrada lateral natural.
+- Pedestres redesenhados com uniformes, rostos, braços e animação de corrida; manifestantes seguram placa escrita LULA.
+- Viaturas da PF redesenhadas com giroflex piscante sem brilho artificial exagerado.
+- 13 disfarces com retratos vetoriais ilustrados (sem emojis): Flávio Hipotético, Turista, Chocolate, Motoboy, Padre, Militar, Jornalista, Zé Gotinha, Cowboy, Jair Bolsonaro com escopeta cenográfica, Patriota do Caminhão e Tio do Zap.
+- 10 disfarces desbloqueáveis por missões de distância e pontuação; 3 disponíveis desde o início.
+- Menu e seleção de personagens compactos para caber em uma tela de celular.
+- Logo própria do jogo integrada como arquivo SVG e incluída no APK.
+- Cidade urbana animada, analógico 360°, passagem para Argentina e final com jato.
 
 ## Jogar
-Abra [index.html](index.html) em navegador moderno. No celular, jogue em paisagem. Arraste o analógico no canto inferior esquerdo e use PODER/TURBO à direita.
+Abra index.html em navegador moderno e use o aparelho em paisagem. Arraste o analógico à esquerda; PODER e TURBO ficam à direita.
 
-## APK Android
-A compilação automática está em GitHub Actions. Abra a aba **Actions**, escolha **Build Android APK** e baixe o artefato **Fuga-da-Fronteira-APK-v2** após uma execução concluída com sucesso.
+## APK
+A compilação automática gera o artefato **Fuga-da-Fronteira-APK-v3** na aba Actions do GitHub.
