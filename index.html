@@ -273,7 +273,7 @@ function portraitSVG(key){
  return '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="62" height="62" rx="9" fill="'+c+'"/><path d="M8 63 Q11 39 32 39 Q53 39 56 63" fill="'+a+'" stroke="#d5e2e8" stroke-width="1.4"/><ellipse cx="32" cy="28" rx="14" ry="17" fill="'+head+'"/><path d="M18 25 Q16 8 33 9 Q49 10 46 27 L42 20 Q32 17 22 22Z" fill="'+hair+'"/><path d="M24 28h5m7 0h5" stroke="#20252c" stroke-width="2.2" stroke-linecap="round"/><path d="M28 36 Q32 39 37 35" fill="none" stroke="#7d3f37" stroke-width="1.5"/>'+extras[key]+'<path d="M16 49h32" stroke="'+a+'" stroke-width="3"/></svg>';
 }
 document.querySelectorAll('[data-portrait]').forEach(el=>el.innerHTML=portraitSVG(el.dataset.portrait));
-function showAlert(title,msg){const a=$('alert');a.textContent=title+' · '+msg;a.style.display='block';setTimeout(()=>{if(state==='PLAYING')a.style.display='none';},2200);}
+function showAlert(title,msg){const a=$('alert');a.textContent=title+' · '+msg;a.style.display='block';setTimeout(()=>{a.style.display='none';},2200);}
 refreshSkinGrid();
 // true 360 degree analog joystick
 const joy=$('joystick'),stick=$('stick');let joyPointer=null;
